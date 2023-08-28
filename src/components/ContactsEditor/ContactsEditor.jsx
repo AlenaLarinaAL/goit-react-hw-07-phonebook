@@ -11,7 +11,7 @@ export const ContactsEditor = () => {
   const [createContact, { isLoading }] = useCreateContactMutation();
   const { data: contacts } = useFetchContactsQuery();
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
     const name = event.target.elements.name.value;
@@ -27,7 +27,12 @@ export const ContactsEditor = () => {
       return;
     }
 
-    createContact({ name, number });
+    try {
+      await createContact({ name, number });
+      Notify.success('Contact successfully added!');
+    } catch (error) {
+      Notify.failure('Oops! Something went wrong:(');
+    }
 
     event.target.reset();
   };

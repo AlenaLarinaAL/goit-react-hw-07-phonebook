@@ -4,18 +4,15 @@ import { App } from 'components/App/App';
 import { GlobalStyles, theme } from 'styles';
 import { Global, ThemeProvider } from '@emotion/react';
 import { Provider } from 'react-redux';
-import { persistor, store } from './store/store';
-import { PersistGate } from 'redux-persist/integration/react';
+import { store } from './store/store';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <ThemeProvider theme={theme}>
-          <Global styles={GlobalStyles} />
-          <App />
-        </ThemeProvider>
-      </PersistGate>
+      <ThemeProvider theme={theme}>
+        <Global styles={GlobalStyles} />
+        <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );

@@ -1,9 +1,15 @@
 import { Form, Button, Input, Label } from './ContactsEditor.styled';
-import { nanoid } from 'nanoid';
-import { useContacts } from 'hooks/useContacts';
+
+import {
+  useCreateContactMutation,
+  useFetchContactsQuery,
+} from 'store/contacts/contactsSlice';
+
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export const ContactsEditor = () => {
-  const { contacts, addContacts } = useContacts();
+  const [createContact, { isLoading }] = useCreateContactMutation();
+  const { data: contacts } = useFetchContactsQuery();
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -16,12 +22,13 @@ export const ContactsEditor = () => {
     );
 
     if (isDuplicate) {
-      alert(`${name} is already in contacts`);
+      Notify.warning(`${name} is already in contacts`);
       event.target.reset();
       return;
     }
 
-    addContacts({ id: nanoid(5), name, number });
+    createContact({ name, number });
+
     event.target.reset();
   };
 
@@ -49,7 +56,9 @@ export const ContactsEditor = () => {
         />
       </Label>
 
-      <Button type="submit">Add contact</Button>
+      <Button type="submit" disabled={isLoading}>
+        Add contact
+      </Button>
     </Form>
   );
 };
